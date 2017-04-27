@@ -145,9 +145,11 @@ class Database {
             $prep = $this->dbConnection->prepare($sqlStat);
             $prep->execute($valuesArray);
             
+            responseJson(array('code' => '0000', 'message' => 'OK'));
+            
         } catch (Exception $e) {
             $this->close();
-            responseJson(array('code' => '0000', 'message' => $e->getMessage()));
+            responseJson(array('code' => '0001', 'message' => $e->getMessage()));
             
         } finally {
             $this->close();
