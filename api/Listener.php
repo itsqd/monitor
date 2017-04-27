@@ -49,7 +49,6 @@ class Listener extends HttpRequest{
         
         
         $db = new Database();
-        debug($this->input('poller'));
         
         $insertArray = array ('table' =>'itsqd_mon_messages',
             'values' => array(
