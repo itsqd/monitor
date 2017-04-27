@@ -21,19 +21,34 @@
  */
 class HttpRequest {
     
+    
     const ERROR_NO_REQUEST_METHOD = 'HTTP_0001';
+    
     
     const METHOD_POST = 1;
     
+    
     const METHOD_GET = 2;
-
+    
+    
+    private $post;
+    
+    
+    private $get;
+    
+    
+    private $server;
+    
+    
+    private $contents;
+    
 
     protected $method;
     /**
      *
      * @var type 
      */
-    protected $parameters;
+    protected $requestParams;
     
     /**
      *
@@ -46,25 +61,19 @@ class HttpRequest {
      * @var type 
      */
     protected $uri;
-
-
-    /**
-     * 
-     */
-    private function processRequest() {
-        
-        
-    }
     
     /**
      * 
      * @param string $item
      */
     public function input($item) {
+        
         if (isset($this->request[strtoupper($item)])) {
             return $this->request[strtoupper($item)];
         } else if (isset($this->parameters[$item])) {
             return $this->parameters[$item];
+        } else if (isset($this->contents[$item])) {
+            return $this->contents[$item];
         } else {
             return null;
         }
@@ -128,7 +137,23 @@ class HttpRequest {
             return $string;
         }
     }
-
-
     
+    function setPost($post) {
+        $this->post = $post;
+    }
+
+    function setGet($get) {
+        $this->get = $get;
+    }
+
+    function setServer($server) {
+        $this->server = $server;
+    }
+
+    function setContents($contents) {
+        $this->contents = (array) json_decode($contents);
+        
+    }
+
+
 }

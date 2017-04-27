@@ -20,6 +20,11 @@ class Listener extends HttpRequest{
 
     function __construct() {
         
+        $this->setContents(file_get_contents('php://input'));
+        $this->setGet($_GET);
+        $this->setPost($_POST);
+        $this->setServer($_SERVER);
+        
     }
     
     /**
@@ -28,12 +33,10 @@ class Listener extends HttpRequest{
     public function process() {
         
         if (($this->method === self::METHOD_POST) || ($this->method === self::METHOD_GET)) {
-             
+            
             if ($this->input('endp') == 'agg') {
                 $this->procAggreg();
-            }
-            
-            
+            }   
         }
         
     }
@@ -46,6 +49,7 @@ class Listener extends HttpRequest{
         
         
         $db = new Database();
+        debug($this->input('poller'));
         
         $insertArray = array ('table' =>'itsqd_mon_messages',
             'values' => array(

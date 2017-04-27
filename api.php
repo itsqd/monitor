@@ -6,7 +6,6 @@ require 'src/hooks.php';
 require 'src/error.php';
 require 'src/response.php';
 
-
 $li = new Listener();
 $li->setRequest($_SERVER);
 $li->process();
