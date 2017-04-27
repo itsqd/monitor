@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use PDO;
 
 class Database {
     
@@ -96,7 +97,7 @@ class Database {
      * @return type
      */
     private function getConfig() {
-        return include ('config/database.php');
+        return include (APP_PATH  . DIRECTORY_SEPARATOR . 'Config/database.php');
     }
     
     /**
