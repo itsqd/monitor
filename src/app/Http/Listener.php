@@ -1,6 +1,9 @@
 <?php
 
-require_once 'HttpRequest.php';
+namespace App\Http;
+
+use App\Core\HttpRequest;
+use App\Core\Database;
 
 /**
  * Description listener
@@ -16,7 +19,7 @@ require_once 'HttpRequest.php';
  * 
  * extends Request
  */
-class Listener extends HttpRequest{
+class Listener extends HttpRequest {
 
     function __construct() {
         
@@ -32,21 +35,25 @@ class Listener extends HttpRequest{
      */
     public function process() {
         
-        if (($this->method === self::METHOD_POST) || ($this->method === self::METHOD_GET)) {
+        if (($this->method === self::METHOD_POST) || 
+                ($this->method === self::METHOD_GET)) {
             
             if ($this->input('endp') == 'agg') {
                 $this->procAggreg();
-            }   
-        }
-        
+            } elseif ($this->input('endp') == 'new') {
+                $this->newAlerts();
+            } elseif ($this->input('endp') == 'ref') {
+                $this->refreshAlerts();
+            } elseif ($this->input('endp') == 'upd') {
+                $this->updateAlerts();
+            }  
+        }   
     }
-    
     
     /**
      * 
      */
     private function procAggreg() {
-        
         
         $db = new Database();
         
@@ -77,4 +84,24 @@ class Listener extends HttpRequest{
         
     }
     
+    /**
+     * 
+     */
+    private function newAlerts() {
+        responseJson(array('message' => 'New Alerts Endpoint reached!!!'));
+    }
+    
+    /**
+     * 
+     */
+    private function updateAlerts() {
+        responseJson(array('message' => 'Update Alert Endpoint reached!!!'));
+    }
+    
+    /**
+     * 
+     */
+    private function refreshAlerts() {
+        responseJson(array('message' => 'Refresh Alerts Endpoint reached!!!'));
+    }
 }

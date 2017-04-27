@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Core;
+
 
 class Database {
     
@@ -49,6 +51,10 @@ class Database {
         $this->open($dbconfig);
     }
     
+    function __destruct() {
+        $this->close();
+    }
+    
     /**
      * 
      */
@@ -94,7 +100,8 @@ class Database {
     }
     
     /**
-     * 
+     * Execute a custom query against the database and
+     * return an associative array
      * 
      * @param string $sqlStatement
      */
@@ -102,16 +109,14 @@ class Database {
                 
         $result = $this->dbConnection->query($sqlStatement)->fetchAll(PDO::FETCH_ASSOC);
         
-        
-        echo '<pre>';
-        echo print_r($result);
-        echo '</pre>';
-        
         $this->close();
     }
     
     /**
+     * Parse the parameters for insert into Database
+     * creating a SQL statement with the parameters
      * 
+     * @param array $parameterArray
      */
     public function save($parameterArray) {
         
@@ -157,15 +162,11 @@ class Database {
         
     }
     
+    /**
+     * Close database connection
+     * 
+     */
     private function close() {
-        $this->dbConnection = null;
+        return $this->dbConnection = null;
     }
-    
-    private function addTimeFields ($sqlString) {
-        
-        
-        
-        return $sqlString;
-        
-    }  
 }
