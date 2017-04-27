@@ -29,7 +29,7 @@ class Listener extends HttpRequest{
         
         if (($this->method === self::METHOD_POST) || ($this->method === self::METHOD_GET)) {
              
-            if ($this->parameters['endp'] == 'agg') {
+            if ($this->input('endp') == 'agg') {
                 $this->procAggreg();
             }
             
