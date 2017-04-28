@@ -98,30 +98,46 @@ class Listener extends HttpRequest {
         
         header('Content-Type: application/json');
         
-        $query = "select * from itsqd_mon_messages where " . 
-                "(flg_stat = 0 or flg_stat is null) " . 
-                " order by message_id desc limit 10";
+        if ($this->input('act') == 'init') {
         
-        $result = $db->select($query);
-        
-        if($result['failed']) {
-            http_response_code(204);
-            $message = json_encode (
-                    array(
-                        'failed' => 1,
-                        'error_message' => $result['error']
-                    ));
-        } else {
-            http_response_code(200);
-            $message = json_encode (
-                    array(
-                        'failed' => 0,
-                        'row_count' => count($result['res']),
-                        'rows' => $result['res']));    
+            $query = "select message_id, 
+                    source_id,
+                    poller,
+                    time,
+                    type,
+                    status,
+                    service,
+                    alert_id,
+                    host,
+                    ip,
+                    uid,
+                    gid,
+                    flg_stat
+                    from itsqd_mon_messages where " . 
+                    "(flg_stat = 0 or flg_stat is null) " . 
+                    " order by message_id desc limit 10";
+
+            $result = $db->select($query);
+
+            if($result['failed']) {
+                http_response_code(204);
+                $message = json_encode (
+                        array(
+                            'failed' => 1,
+                            'error_message' => $result['error']
+                        ));
+            } else {
+                http_response_code(200);
+                $message = json_encode (
+                        array(
+                            'failed' => 0,
+                            'row_count' => count($result['res']),
+                            'rows' => $result['res']));    
+            }
+
+            echo $message;
+            exit(0);
         }
-        
-        echo $message;
-        exit(0);
     }
     
     /**
@@ -138,7 +154,39 @@ class Listener extends HttpRequest {
         responseJson(array('message' => 'Refresh Alerts Endpoint reached!!!'));
     }
     
-    private function endPointInfo () {
+    /**
+     * Return info from EndPoint Services
+     */
+    private function endPointInfo () 
+            {
         
+        $array = array(
+            "endpoints" => array(
+                "endpoint" => array(
+                    "endp" => "new",
+                    "act" => "init",
+                    "url" => "api.php?endp=new&act=init",
+                    "response_fields" => array(
+                        "message_id",
+                        "source_id",
+                        "poller",
+                        "time",
+                        "type",
+                        "status",
+                        "service",
+                        "alert_id",
+                        "host",
+                        "ip",
+                        "uid",
+                        "gid",
+                        "flg_stat"
+                    )
+                )
+            )
+        );
+        
+        
+        header('Content-Type: application/json');
+        echo json_encode($array);
     }
 }

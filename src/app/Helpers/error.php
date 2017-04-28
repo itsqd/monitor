@@ -4,9 +4,39 @@ ini_set('display_errors', 'On');
 
 function app_error_handler($errno, $errmsg, $errfile, $errline)
 {
-  //if (ini_get('error_reporting')) throw new ErrorException($errmsg, 0, $errno, $errfile, $errline);
-  throw new ErrorException("$errmsg", 0, $errno, $errfile, $errline);
+    echo '<h1>Ooooopppss!!!!!</h1></br>';
+    echo '<pre>' . $errno . ' - ' . $errmsg . '</pre>';
+    exit(0);
+    
 }
 
+
+/**
+ * 
+ * @param type $module
+ * @param type $message
+ * @param type $function
+ * @param type $class
+ * @param type $detail
+ */
+function jsonErrorReturn($module, $message, $function = '',$class='', $detail='') {
+    
+    header('Content-Type: application/json');
+    echo json_encode([
+        'module' => $module,
+        'message' => $message,
+        'class' => $class,
+        'function' => $function,
+        'detail' => $detail,
+    ]);
+    
+    exit(0);
+    
+}
+
+
+
 set_error_handler("app_error_handler", (E_NOTICE | E_WARNING | E_ERROR));
+
+
 ?>

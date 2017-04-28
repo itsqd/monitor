@@ -80,15 +80,17 @@ class Database {
                     ';dbname=' . $this->config['database'] . 
                     ';charset=UTF8';
 
-
-            //print_r($connString);
             $this->dbConnection = new PDO($connString, $this->config['username'], 
                     $this->config['password']);
             
             return $this;
             
-        } catch (PDOException $ex) {
-            print_r($ex->getMessage());
+        } catch (Exception $ex) {
+            jsonErrorReturn('Datatabse Connection',
+                    $ex->getMessage(), 
+                    (__FUNCTION__), 
+                    (__CLASS__), 
+                    $ex->getTrace());
             exit();
         }
     }
