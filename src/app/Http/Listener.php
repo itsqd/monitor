@@ -100,7 +100,7 @@ class Listener extends HttpRequest {
         
         $query = "select * from itsqd_mon_messages where " . 
                 "(flg_stat = 0 or flg_stat is null) " . 
-                " order by message_id dsc limit 10";
+                " order by message_id desc limit 10";
         
         $result = $db->select($query);
         
