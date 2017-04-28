@@ -23,6 +23,7 @@ class Listener extends HttpRequest {
 
     function __construct() {
         
+
         $this->setContents(file_get_contents('php://input'));
         $this->setGet($_GET);
         $this->setPost($_POST);
@@ -46,7 +47,9 @@ class Listener extends HttpRequest {
                 $this->refreshAlerts();
             } elseif ($this->input('endp') == 'upd') {
                 $this->updateAlerts();
-            }  
+            } elseif ($this->input('endp') == 'info') {
+                $this->endPointInfo ();
+            }
         }   
     }
     
@@ -82,13 +85,43 @@ class Listener extends HttpRequest {
         
         $db->save($insertArray);
         
+        responseJson(array('code' => '0000', 'message' => 'OK'));
+        
     }
     
     /**
      * 
      */
     private function newAlerts() {
-        responseJson(array('message' => 'New Alerts Endpoint reached!!!'));
+        
+        $db = new Database();
+        
+        header('Content-Type: application/json');
+        
+        $query = "select * from itsqd_mon_messages where " . 
+                "(flg_stat = 0 or flg_stat is null) " . 
+                " order by message_id dsc limit 10";
+        
+        $result = $db->select($query);
+        
+        if($result['failed']) {
+            http_response_code(204);
+            $message = json_encode (
+                    array(
+                        'failed' => 1,
+                        'error_message' => $result['error']
+                    ));
+        } else {
+            http_response_code(200);
+            $message = json_encode (
+                    array(
+                        'failed' => 0,
+                        'row_count' => count($result['res']),
+                        'rows' => $result['res']));    
+        }
+        
+        echo $message;
+        exit(0);
     }
     
     /**
@@ -103,5 +136,9 @@ class Listener extends HttpRequest {
      */
     private function refreshAlerts() {
         responseJson(array('message' => 'Refresh Alerts Endpoint reached!!!'));
+    }
+    
+    private function endPointInfo () {
+        
     }
 }

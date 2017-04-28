@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use PDO;
+use Exception;
 
 class Database {
     
@@ -104,13 +105,47 @@ class Database {
      * Execute a custom query against the database and
      * return an associative array
      * 
+     * The result should be an array with 3 elements
+     * failed: true or false
+     * res: For the actual query result
+     * error: in case of an error occurs, the message will
+     * be in this element
+     * 
      * @param string $sqlStatement
+     * @return array
+     * @throws Exception
      */
     public function select($sqlStatement) {
-                
-        $result = $this->dbConnection->query($sqlStatement)->fetchAll(PDO::FETCH_ASSOC);
         
-        $this->close();
+        $result['failed'] = false;
+        
+        try {
+            
+            $res = $this->dbConnection->query($sqlStatement);
+            
+            // If is not a class then the query is giving an error
+            // throw an exception
+            if (is_bool($res)) {
+                throw new Exception('An error as ocurred while executing ' . 
+                        'the SQL Statement: ' . $sqlStatement);
+            }
+            
+            $result['res'] = $res->fetchAll(PDO::FETCH_ASSOC);
+            
+        
+        } catch (Exception $exc) {
+            $result['failed'] = true;
+            $result['res'] = null;
+            $result['error'] = $exc->getMessage(); 
+            
+        } finally {
+            return $result;
+        }
+          
+
+        
+        
+        
     }
     
     /**
@@ -151,7 +186,7 @@ class Database {
             $prep = $this->dbConnection->prepare($sqlStat);
             $prep->execute($valuesArray);
             
-            responseJson(array('code' => '0000', 'message' => 'OK'));
+            return;
             
         } catch (Exception $e) {
             $this->close();

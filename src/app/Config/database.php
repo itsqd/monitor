@@ -3,9 +3,11 @@
 return ['connections' => [
             'connection_1' => [
                 'driver' => 'mysql',
-                'username' => 'uapi',
-                'password' => '12345',
-                'host' => 'localhost',
+                //'username' => 'uapi',
+                //'password' => '12345',
+                'host' => '172.16.9.169',
+                'password' => '0217166702',
+                'username' => 'andreffonseca',
                 'port' => '3306',
                 'database' => 'itsqd_mondb',
                 'charset'=>'UTF8',

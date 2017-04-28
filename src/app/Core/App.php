@@ -23,25 +23,14 @@ namespace App\Core;
  */
 class App {
     
-    public static function getInstance()
-    {
-        
-        static $instance = null;
-        if (null === $instance) {
-            $instance = new static();
-        }
-
-        return $instance;
-    }
+    private $config;
     
     function __construct() {
         
     }
     
     
-    function register() {
-        
-        $this->getInstance();
+    public function register() {
         
         // required Base Config Providers        
         require APP_PATH  . DIRECTORY_SEPARATOR . 'Core/HttpRequest.php';
@@ -55,6 +44,8 @@ class App {
         
         //register configs
         require APP_PATH  . DIRECTORY_SEPARATOR . 'Config/database.php';
+        
+        $this->config = include (APP_PATH  . DIRECTORY_SEPARATOR . 'Config/database.php');
         
     }
     
