@@ -1,11 +1,12 @@
 <?php
 
-function debug($message, $exit=true) {
+function debug($message, $exit=false) {
     echo '<pre>';
     print_r($message);
     echo '</pre>';
     
-    exit(0);
+    if ($exit)
+        exit(0);
 }
 
 

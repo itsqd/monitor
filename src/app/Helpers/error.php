@@ -5,7 +5,7 @@ ini_set('display_errors', 'On');
 function app_error_handler($errno, $errmsg, $errfile, $errline)
 {
     echo '<h1>Ooooopppss!!!!!</h1></br>';
-    echo '<pre>' . $errno . ' - ' . $errmsg . '</pre>';
+    echo '<pre>' . $errno . ' - ' . $errmsg . ' - ' . $errfile . ' - ' . $errline .'</pre>';
     exit(0);
     
 }

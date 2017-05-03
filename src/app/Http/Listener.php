@@ -20,14 +20,24 @@ use App\Core\Database;
  * extends Request
  */
 class Listener extends HttpRequest {
-
+    
+    private $dbConnection;
+    
+    private $appInstance;
+    /**
+     * 
+     * @param \App\Core\App $app
+     */
     function __construct() {
         
-
+        $this->appInstance = \App\Core\App::getInstance();
+        
         $this->setContents(file_get_contents('php://input'));
         $this->setGet($_GET);
         $this->setPost($_POST);
         $this->setServer($_SERVER);
+        
+        $this->dbConnection = $this->appInstance->getConfig('database.poll_1');
         
     }
     
@@ -58,7 +68,7 @@ class Listener extends HttpRequest {
      */
     private function procAggreg() {
         
-        $db = new Database();
+        $db = new Database($this->dbConnection);
         
         $insertArray = array ('table' =>'itsqd_mon_messages',
             'values' => array(
@@ -94,7 +104,8 @@ class Listener extends HttpRequest {
      */
     private function newAlerts() {
         
-        $db = new Database();
+       
+        $db = new Database($this->dbConnection);
         
         header('Content-Type: application/json');
         

@@ -32,14 +32,6 @@ class Database {
      * @var type 
      */
     private $dbDriver;
-    
-    /**
-     *
-     * @var type 
-     */
-    private $config;
-    
-    
     /*
      * 
      */
@@ -47,8 +39,9 @@ class Database {
     
     /**
      * 
+     * @param array $config
      */
-    function __construct($dbconfig = 'connection_1') {
+    function __construct($dbconfig) {
         
         $this->open($dbconfig);
     }
@@ -64,24 +57,16 @@ class Database {
         
         try {
             
-            $this->config = $this->getConfig();
-            
-            $this->config = $this->config['connections'][$dbconfig];
-            
-            
-            
-            
-            
             $connString = '';
 
             // start building connection string
-            $connString = $connString . $this->config['driver'] . 
-                    ':host=' . $this->config['host'] . 
-                    ';dbname=' . $this->config['database'] . 
+            $connString = $connString . $dbconfig['driver'] . 
+                    ':host=' . $dbconfig['host'] . 
+                    ';dbname=' . $dbconfig['database'] . 
                     ';charset=UTF8';
 
-            $this->dbConnection = new PDO($connString, $this->config['username'], 
-                    $this->config['password']);
+            $this->dbConnection = new PDO($connString, $dbconfig['username'], 
+                    $dbconfig['password']);
             
             return $this;
             
@@ -95,13 +80,6 @@ class Database {
         }
     }
     
-    /**
-     * 
-     * @return type
-     */
-    private function getConfig() {
-        return include (APP_PATH  . DIRECTORY_SEPARATOR . 'Config/database.php');
-    }
     
     /**
      * Execute a custom query against the database and
@@ -134,8 +112,10 @@ class Database {
             
             $result['res'] = $res->fetchAll(PDO::FETCH_ASSOC);
             
+            
         
         } catch (Exception $exc) {
+            
             $result['failed'] = true;
             $result['res'] = null;
             $result['error'] = $exc->getMessage(); 
