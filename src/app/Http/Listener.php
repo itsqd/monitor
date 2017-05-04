@@ -90,6 +90,10 @@ class Listener extends HttpRequest {
                 //-------------------------------------------------------
                 'thruk_url' => $this->input('url_1'),
                 'sca_url' => $this->input('url_2'),
+                'actions' => $this->input('actions'),
+                'info' => $this->input('info'),
+                'prio' => $this->input('prio'),
+                'graph' => $this->input('graph'),
                 'flg_stat' => 0)
         );
         
